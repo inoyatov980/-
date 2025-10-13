@@ -1,45 +1,49 @@
-// Выбор возможных вариантов
+// Возможные варианты
 const choices = ['rock', 'paper', 'scissors'];
 
-// Элемент результата
-let resultElement = document.getElementById('result');
+// Переменные для подсчета очков
+let playerScore = 0;
+let computerScore = 0;
 
-// Генерация случайного хода компьютера
+// Элементы интерфейса
+let resultElement = document.getElementById('result');
+let historyList = document.getElementById('history');
+let playerScoreDisplay = document.getElementById('playerScore');
+let computerScoreDisplay = document.getElementById('computerScore');
+
+// Генерируем выбор компьютера
 function computerChoice() {
     return choices[Math.floor(Math.random() * choices.length)];
 }
 
-// Сравнение результатов игрока и компьютера
+// Сравниваем выборы игрока и компьютера
 function compareChoices(playerChoice, compChoice) {
     let resultText;
     switch (playerChoice + '|' + compChoice) {
-        // Случаи победы игрока
         case 'rock|scissors':   // камень побеждает ножницы
         case 'scissors|paper':  // ножницы побеждают бумагу
         case 'paper|rock':      // бумага побеждает камень
             resultText = 'Победил игрок!';
+            playerScore++;
             break;
-        
-        // Случаи поражения игрока
         case 'rock|paper':     // камень проигрывает бумаге
         case 'scissors|rock':  // ножницы проигрывают камню
         case 'paper|scissors': // бумага проигрывает ножницам
             resultText = 'Компьютер победил.';
+            computerScore++;
             break;
-            
-        // Остальные случаи — ничья
         default:
             resultText = 'Ничья!';
     }
     return resultText;
 }
 
-// Основная логика игры
+// Игра
 function playGame(choice) {
-    const compChoice = computerChoice();  // Ход компьютера
-    const result = compareChoices(choice, compChoice);  // Результат сравнения
+    const compChoice = computerChoice();  // Компьютер выбирает вариант
+    const result = compareChoices(choice, compChoice);  // Сравниваем выбор
     
-    // Отображаем итоговый результат
+    // Сообщаем игроку о результате раунда
     resultElement.innerHTML = `
         ${choice === 'rock' ? '🪨' : choice === 'scissors' ? '✂️' : '📄'}
         против
@@ -47,7 +51,22 @@ function playGame(choice) {
         →
         ${result}
     `;
+    
+    // Обновляем очки
+    playerScoreDisplay.textContent = `Игрок: ${playerScore}`;
+    computerScoreDisplay.textContent = `Компьютер: ${computerScore}`;
+    
+    // Сохраняем историю партий
+    const matchResult = `<li>${choice} vs ${compChoice}: ${result}</li>`;
+    historyList.insertAdjacentHTML('afterbegin', matchResult);
 }
+
+// Активируем кнопки выбора
+document.querySelectorAll('.options button').forEach(button => {
+    button.addEventListener('click', () => {
+        playGame(button.dataset.choice);
+    });
+});
 
 // Инициализация Telegram WebApp
 window.Telegram.WebApp.ready();
