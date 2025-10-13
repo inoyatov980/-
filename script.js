@@ -7,7 +7,6 @@ let computerScore = 0;
 
 // Элементы интерфейса
 let resultElement = document.getElementById('result');
-let historyList = document.getElementById('history');
 let playerScoreDisplay = document.getElementById('playerScore');
 let computerScoreDisplay = document.getElementById('computerScore');
 
@@ -64,7 +63,7 @@ function compareChoices(playerChoice, compChoice) {
     return resultText;
 }
 
-// Главная логика игры
+// Игра
 function playGame(choice) {
     const compChoice = computerChoice();  // Компьютер выбирает вариант
     const result = compareChoices(choice, compChoice);  // Сравниваем выбор
@@ -81,10 +80,6 @@ function playGame(choice) {
     // Обновляем счёт
     playerScoreDisplay.textContent = `Игрок: ${playerScore}`;
     computerScoreDisplay.textContent = `Компьютер: ${computerScore}`;
-    
-    // Сохраняем историю матчей
-    const matchResult = `<li>${choice} (${choice === 'rock' ? '🪨' : choice === 'scissors' ? '✂️' : '📄'}) vs ${compChoice} (${compChoice === 'rock' ? '🪨' : compChoice === 'scissors' ? '✂️' : '📄'}) → ${result}</li>`;
-    historyList.insertAdjacentHTML('afterbegin', matchResult);
 }
 
 // Назначаем обработчики кликов на кнопки
