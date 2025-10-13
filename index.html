@@ -2,20 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Telegram Rock Paper Scissors Game</title>
+    <title>Rock Paper Scissors Game</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div id="game-container">
     <h1>Камень, Ножницы, Бумага!</h1>
-    <div class="options">
-        <button onclick="playGame('rock')">🪨 Камень</button>
-        <button onclick="playGame('scissors')">✂️ Ножницы</button>
-        <button onclick="playGame('paper')">📄 Бумага</button>
+    <div class="scoreboard">
+        <span id="playerScore">Игрок: 0</span>
+        <span id="computerScore">Компьютер: 0</span>
     </div>
+    <div class="options">
+        <button data-choice="rock"><img src="images/rock.png" alt="Камень"/></button>
+        <button data-choice="scissors"><img src="images/scissors.png" alt="Ножницы"/></button>
+        <button data-choice="paper"><img src="images/paper.png" alt="Бумага"/></button>
+    </div>
+    <div id="history"></div>
     <p id="result"></p>
 </div>
-<!-- Подключаем JS SDK Telegram -->
 <script src="https://cdn.telegram.org/js/telegram-web-app.js"></script>
 <script src="script.js"></script>
 </body>
