@@ -57,7 +57,7 @@ function playGame(choice) {
     computerScoreDisplay.textContent = `Компьютер: ${computerScore}`;
     
     // Сохраняем историю партий
-    const matchResult = `<li>${choice} vs ${compChoice}: ${result}</li>`;
+    const matchResult = `<li>${choice} (${choice === 'rock' ? '🪨' : choice === 'scissors' ? '✂️' : '📄'}) vs ${compChoice} (${compChoice === 'rock' ? '🪨' : compChoice === 'scissors' ? '✂️' : '📄'}) → ${result}</li>`;
     historyList.insertAdjacentHTML('afterbegin', matchResult);
 }
 
