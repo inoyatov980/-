@@ -11,6 +11,32 @@ let historyList = document.getElementById('history');
 let playerScoreDisplay = document.getElementById('playerScore');
 let computerScoreDisplay = document.getElementById('computerScore');
 
+// Получаем Telegram ID пользователя
+window.Telegram.WebApp.onReady(() => {
+    const userID = window.Telegram.WebApp.initDataUnsafe.user.id;
+    const username = window.Telegram.WebApp.initDataUnsafe.user.username || '';
+
+    // Устанавливаем значения в hidden input
+    document.getElementById('telegramUserID').value = userID;
+
+    // Регистрация пользователя (отправляем данные на сервер)
+    $.ajax({
+        method: 'POST',
+        url: '/register-user', // Адрес сервера
+        dataType: 'json',
+        data: {
+            telegram_id: userID,
+            username: username
+        },
+        success: function(response) {
+            alert('Регистрация успешно завершена!');
+        },
+        error: function(error) {
+            alert('Ошибка при регистрации.');
+        }
+    });
+});
+
 // Генерируем выбор компьютера
 function computerChoice() {
     return choices[Math.floor(Math.random() * choices.length)];
@@ -38,12 +64,12 @@ function compareChoices(playerChoice, compChoice) {
     return resultText;
 }
 
-// Игра
+// Главная логика игры
 function playGame(choice) {
     const compChoice = computerChoice();  // Компьютер выбирает вариант
     const result = compareChoices(choice, compChoice);  // Сравниваем выбор
     
-    // Сообщаем игроку о результате раунда
+    // Показываем результат текущего раунда
     resultElement.innerHTML = `
         ${choice === 'rock' ? '🪨' : choice === 'scissors' ? '✂️' : '📄'}
         против
@@ -52,21 +78,18 @@ function playGame(choice) {
         ${result}
     `;
     
-    // Обновляем очки
+    // Обновляем счёт
     playerScoreDisplay.textContent = `Игрок: ${playerScore}`;
     computerScoreDisplay.textContent = `Компьютер: ${computerScore}`;
     
-    // Сохраняем историю партий
+    // Сохраняем историю матчей
     const matchResult = `<li>${choice} (${choice === 'rock' ? '🪨' : choice === 'scissors' ? '✂️' : '📄'}) vs ${compChoice} (${compChoice === 'rock' ? '🪨' : compChoice === 'scissors' ? '✂️' : '📄'}) → ${result}</li>`;
     historyList.insertAdjacentHTML('afterbegin', matchResult);
 }
 
-// Активируем кнопки выбора
+// Назначаем обработчики кликов на кнопки
 document.querySelectorAll('.options button').forEach(button => {
     button.addEventListener('click', () => {
         playGame(button.dataset.choice);
     });
 });
-
-// Инициализация Telegram WebApp
-window.Telegram.WebApp.ready();
